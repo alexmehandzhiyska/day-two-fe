@@ -1,0 +1,45 @@
+.sidebar {
+    min-height: 100vh;
+    border-right: 1px solid lightgray;
+    width: 30vw;
+    margin-top: 2em;
+}
+
+.month-title {
+    margin-left: 15px;
+}
+
+.entry {
+    display: flex;
+    padding: 5px 10px 5px 0;
+    border-bottom: 1px solid lightgray;
+}
+
+.active {
+    color: white;
+    background: var(--blue);
+}
+
+.date-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+    min-width: 50px !important;
+    max-width: 50px !important;
+    font-weight: bold;
+    color: black;
+    background: white;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+}
+
+.day,
+.date {
+    margin: 2px;
+}
+
+.content-short {
+    font-size: 0.85rem;
+}
