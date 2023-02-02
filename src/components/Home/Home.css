@@ -30,15 +30,9 @@
 
 .entry-settings {
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     height: 2vh;
     margin: 0.5em 2em;
-}
-
-.entry-settings>article>* {
-    font-size: 1.5rem;
-    color: gray;
-    padding: 0.5em;
 }
 
 .entry-wrapper {
@@ -57,6 +51,9 @@
 }
 
 .icon {
+    font-size: 1.7rem;
+    color: gray;
+    padding: 0.5em;
     border-radius: 10px;
     transition: 0.5s ease;
 }

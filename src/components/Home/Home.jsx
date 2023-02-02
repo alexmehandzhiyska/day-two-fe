@@ -64,14 +64,8 @@ const Home = () => {
             {activeEntry &&
                 <article>
                     <section className="entry-settings">
-                        <article className="icons-group-1">
-                            <FontAwesomeIcon icon={faXmark} className="icon x-icon"></FontAwesomeIcon>
-                        </article>
-
-                        <article className="icons-group-2">
-                            <FontAwesomeIcon icon={faEllipsis} className="icon menu-icon"></FontAwesomeIcon>
-                            <FontAwesomeIcon icon={faPlus} onClick={e => createEntry(e)} className="icon plus-icon"></FontAwesomeIcon>
-                        </article>
+                        <FontAwesomeIcon icon={faEllipsis} className="icon menu-icon"></FontAwesomeIcon>
+                        <FontAwesomeIcon icon={faPlus} onClick={e => createEntry(e)} className="icon plus-icon"></FontAwesomeIcon>
                     </section>
 
                     <form className="entry-wrapper" onSubmit={(e) => updateEntry(e)}>

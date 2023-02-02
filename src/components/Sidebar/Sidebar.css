@@ -1,12 +1,9 @@
 .sidebar {
-    min-height: 100vh;
     border-right: 1px solid lightgray;
     width: 30vw;
+    height: 100vh;
     margin-top: 2em;
-}
-
-.month-title {
-    margin-left: 15px;
+    overflow-y: scroll;
 }
 
 .entry {
@@ -35,9 +32,17 @@
     border-radius: 10px;
 }
 
+.day {
+    font-size: 0.85rem;
+}
+
+.date {
+    font-size: 1.25rem;
+}
+
 .day,
 .date {
-    margin: 2px;
+    margin: 4px 2px;
 }
 
 .content-short {
