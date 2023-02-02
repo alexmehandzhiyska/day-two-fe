@@ -1,0 +1,33 @@
+.options-menu {
+    position: absolute;
+    display: none;
+    width: 10em;
+    opacity: 90%;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    background: #F1f1f1;
+}
+
+.menu-active {
+    padding: 0;
+    display: block;
+}
+
+.options-menu-item {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    font-size: 1.1rem;
+    list-style-type: none;
+    padding: 10px 5px;
+    transition: 0.15s ease;
+}
+
+.options-menu-item:hover {
+    color: white;
+    background: var(--blue);
+}
+
+.options-menu-icon {
+    margin-right: 5px;
+}

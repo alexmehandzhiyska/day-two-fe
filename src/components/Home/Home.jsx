@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faEllipsis, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 
 import { getFullDate } from "../../utils";
 import { entriesService } from "../../services/entriesService";
@@ -34,7 +34,7 @@ const Home = () => {
         const entryId = formData.get('entry-id');
         const content = formData.get('content');
 
-        entriesService.updateEntry(entryId, content)
+        entriesService.updateOne(entryId, content)
             .then(() => {
                 setStateSwitch(!stateSwitch);
                 successNotification('Entry saved successfully!');
@@ -47,7 +47,7 @@ const Home = () => {
     const createEntry = (event) => {
         event.preventDefault();
   
-        entriesService.createEntry()
+        entriesService.createOne()
             .then(res => {
                 setStateSwitch(true);
                 setActiveEntry(res);
@@ -59,7 +59,7 @@ const Home = () => {
 
     return (
         <section className="content-wrapper">
-            <Sidebar entries={entries} activeEntry={activeEntry} setActiveEntry={setActiveEntry}></Sidebar>
+            <Sidebar entries={entries} activeEntry={activeEntry} setActiveEntry={setActiveEntry} stateSwitch={stateSwitch} setStateSwitch={setStateSwitch}></Sidebar>
 
             {activeEntry &&
                 <article>

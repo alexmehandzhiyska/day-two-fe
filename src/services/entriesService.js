@@ -22,7 +22,7 @@ const getOne = async (entryId) => {
     return data;
 }
 
-const createEntry = async () => {
+const createOne = async () => {
     const response = await fetch(`${baseUrl}/entries`, {
         method: 'POST',
         headers: {
@@ -39,7 +39,7 @@ const createEntry = async () => {
     return data;
 }
 
-const updateEntry = async (entryId, content) => {
+const updateOne = async (entryId, content) => {
     const response = await fetch(`${baseUrl}/entries/${entryId}`, {
         method: 'PATCH',
         headers: {
@@ -57,4 +57,21 @@ const updateEntry = async (entryId, content) => {
     return data;
 }
 
-export const entriesService = { getAll, getOne, createEntry, updateEntry };
+const deleteOne = async (entryId) => {
+    const response = await fetch(`${baseUrl}/entries/${entryId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data);
+    }
+
+    return data;
+}
+
+export const entriesService = { getAll, getOne, createOne, updateOne, deleteOne };
