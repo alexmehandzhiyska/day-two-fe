@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faEllipsis } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEllipsis, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 
 import { getFullDate } from "../../utils";
 import { entriesService } from "../../services/entriesService";
@@ -66,6 +66,7 @@ const Home = () => {
                     <section className="entry-settings">
                         <FontAwesomeIcon icon={faEllipsis} className="icon menu-icon"></FontAwesomeIcon>
                         <FontAwesomeIcon icon={faPlus} onClick={e => createEntry(e)} className="icon plus-icon"></FontAwesomeIcon>
+                        <FontAwesomeIcon icon={faPaperclip} className="icon menu-icon"></FontAwesomeIcon>
                     </section>
 
                     <form className="entry-wrapper" onSubmit={(e) => updateEntry(e)}>
