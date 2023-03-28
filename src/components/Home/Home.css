@@ -20,7 +20,6 @@
     resize: none;
     width: 35vw;
     min-height: 80vh;
-    line-break: anywhere;
 }
 
 .entry-content:focus {

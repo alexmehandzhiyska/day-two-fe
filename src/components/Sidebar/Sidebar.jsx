@@ -29,8 +29,10 @@ const Sidebar = (props) => {
     const openOptionsMenu = (event) => {
         event.preventDefault();
 
-        const optionsMenuEl = event.currentTarget.querySelector('ul');
+        const activeOptionsMenuEls = document.querySelectorAll('.menu-active');
+        activeOptionsMenuEls.forEach(menuEl => menuEl.classList.remove('menu-active'));
 
+        const optionsMenuEl = event.currentTarget.querySelector('ul');
         optionsMenuEl.classList.add('menu-active');
 
         const xPosition = event.clientX;

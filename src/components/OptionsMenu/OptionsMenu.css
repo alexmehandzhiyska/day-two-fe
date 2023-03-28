@@ -21,6 +21,7 @@
     list-style-type: none;
     padding: 10px 5px;
     transition: 0.15s ease;
+    color: black;
 }
 
 .options-menu-item:hover {
