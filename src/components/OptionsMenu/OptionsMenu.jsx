@@ -1,4 +1,5 @@
 import { UilTrash } from '@iconscout/react-unicons'
+import { useNavigate } from 'react-router-dom';
 
 import { entriesService } from '../../services/entriesService';
 import { errorNotification } from '../notifications';
@@ -7,8 +8,7 @@ import './OptionsMenu.css';
 
 const OptionsMenu = (props) => {
     const entryId = props.entryId;
-    const stateSwitch = props.stateSwitch;
-    const setStateSwitch = props.setStateSwitch;
+    const navigate = useNavigate();
 
     const deleteEntry = (event) => {
         event.preventDefault();
@@ -16,7 +16,10 @@ const OptionsMenu = (props) => {
         
         entriesService.deleteOne(currentEntryId)
             .then(() => {
-                setStateSwitch(!stateSwitch);
+                entriesService.getAll()
+                    .then(res => {
+                        navigate(`/entries/${res[0].id}`);
+                    });
             })
             .catch(() => {
                 errorNotification('error');

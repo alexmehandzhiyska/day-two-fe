@@ -1,4 +1,4 @@
-import { baseUrl } from "../constants";
+import { baseUrl } from '../constants';
 
 const getAll = async () => {
     const response = await fetch(`${baseUrl}/entries`);

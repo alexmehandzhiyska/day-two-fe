@@ -1,30 +1,47 @@
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEllipsis, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 
-import { getFullDate } from "../../utils";
-import { entriesService } from "../../services/entriesService";
-import { errorNotification, successNotification } from "../notifications";
+import { getFullDate } from '../../utils';
+import { entriesService } from '../../services/entriesService';
+import { imagesService } from '../../services/imagesService';
+import { errorNotification, successNotification } from '../notifications';
 
-import Sidebar from "../Sidebar/Sidebar";
+import Sidebar from '../Sidebar/Sidebar';
 
 import './Home.css';
 
 const Home = () => {
     const [entries, setEntries] = useState([]);
     const [activeEntry, setActiveEntry] = useState(null);
-    const [stateSwitch, setStateSwitch] = useState(false);
+    const [entryImgs, setEntryImgs] = useState([]);
+
+    const { activeEntryId } = useParams();
+    const navigate = useNavigate();
+
+    const hiddenFileInput = useRef(null);
 
     useEffect(() => {
         entriesService.getAll()
             .then(res => {
                 setEntries(res);
-                setActiveEntry(res[0]);
+                setActiveEntry(res.find(entry => entry.id == activeEntryId));
             })
             .catch(err => {
                 errorNotification(err);
             });
-    }, [stateSwitch]);
+    }, [activeEntryId]);
+
+    useEffect(() => {
+        imagesService.getByEntryId(activeEntryId)
+            .then(res => {
+                setEntryImgs(res);
+            })
+            .catch(() => {
+                errorNotification('Error');
+            });
+    }, [activeEntryId]);
 
     const updateEntry = (event) => {
         event.preventDefault();
@@ -36,7 +53,6 @@ const Home = () => {
 
         entriesService.updateOne(entryId, content)
             .then(() => {
-                setStateSwitch(!stateSwitch);
                 successNotification('Entry saved successfully!');
             })
             .catch(() => {
@@ -49,24 +65,35 @@ const Home = () => {
   
         entriesService.createOne()
             .then(res => {
-                setStateSwitch(true);
-                setActiveEntry(res);
+                navigate(`/entries/${res.id}`);
             })
             .catch(() => {
                 errorNotification('Could not create entry');
             });
     };
 
+    const openFileSystem = () => {
+        hiddenFileInput.current.click();
+    };
+
+    const uploadImage = (event) => {
+        const fileUploaded = event.target.files[0];
+        
+    };
+
     return (
         <section className="content-wrapper">
-            <Sidebar entries={entries} activeEntry={activeEntry} setActiveEntry={setActiveEntry} stateSwitch={stateSwitch} setStateSwitch={setStateSwitch}></Sidebar>
+            <Sidebar entries={entries} activeEntry={activeEntry}></Sidebar>
 
             {activeEntry &&
                 <article>
                     <section className="entry-settings">
                         <FontAwesomeIcon icon={faEllipsis} className="icon menu-icon"></FontAwesomeIcon>
                         <FontAwesomeIcon icon={faPlus} onClick={e => createEntry(e)} className="icon plus-icon"></FontAwesomeIcon>
-                        <FontAwesomeIcon icon={faPaperclip} className="icon menu-icon"></FontAwesomeIcon>
+                        <form method="post">
+                            <input type="file" name="entry-img" id="entry-img" ref={hiddenFileInput} onChange={(e) => uploadImage(e)} />
+                            <FontAwesomeIcon icon={faPaperclip} onClick={() => openFileSystem()} className="icon menu-icon"></FontAwesomeIcon>
+                        </form>
                     </section>
 
                     <form className="entry-wrapper" onSubmit={(e) => updateEntry(e)}>
@@ -75,6 +102,10 @@ const Home = () => {
                         <section className="entry-content-wrapper">
                             <h1 className="entry-date">{getFullDate(activeEntry.createdAt)}</h1>
                             <textarea className="entry-content" name="content" value={activeEntry.content} onChange={e => setActiveEntry({...activeEntry, content: e.target.value})}></textarea>
+                        </section>
+
+                        <section className="entry-imgs-wrapper">
+                            {entryImgs.map(img => <img key={img.id} src={img.path} className="entry-img"></img>)}
                         </section>
 
                         <button className="save-entry-btn" type="submit">Save</button>

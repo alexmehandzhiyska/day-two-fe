@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { getDay, getDayNum } from '../../utils';
 import OptionsMenu from '../OptionsMenu/OptionsMenu';
@@ -8,22 +9,25 @@ import './Sidebar.css';
 const Sidebar = (props) => {
     const entries = props.entries;
     const activeEntry = props.activeEntry;
-    const setActiveEntry = props.setActiveEntry;
-    const stateSwitch = props.stateSwitch;
-    const setStateSwitch = props.setStateSwitch;
+
+    const navigate = useNavigate();
 
     useEffect(() => {
-        window.addEventListener('click', () => {
+        const sidebarEl = document.querySelector('.sidebar');
+        
+        sidebarEl.addEventListener('click', () => {
             const optionsMenuEl = document.querySelector('.menu-active');
-            optionsMenuEl.className = 'options-menu';
-            optionsMenuEl.display = 'none';
+
+            if (optionsMenuEl) {
+                optionsMenuEl.className = 'options-menu';
+                optionsMenuEl.display = 'none';
+            }
         });
     }, []);
     
     const changeEntry = (event) => {
         const selectedEntryId = event.currentTarget.querySelector('input').value;
-        const selectedEntry = entries.find(e => e.id == selectedEntryId);
-        setActiveEntry(selectedEntry);
+        navigate(`/entries/${selectedEntryId}`);
     };
 
     const openOptionsMenu = (event) => {
@@ -59,7 +63,7 @@ const Sidebar = (props) => {
                             <p>{entry.content?.slice(0, 85)}...</p>
                         </div>
 
-                        <OptionsMenu entryId={entry.id} stateSwitch={stateSwitch} setStateSwitch={setStateSwitch}></OptionsMenu>
+                        <OptionsMenu entryId={entry.id}></OptionsMenu>
                     </section>
                 )}
                 </>
