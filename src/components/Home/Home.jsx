@@ -2,11 +2,12 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEllipsis, faPaperclip } from '@fortawesome/free-solid-svg-icons';
+import TextareaAutosize from 'react-textarea-autosize';
 
-import { getFullDate } from '../../utils';
 import { entriesService } from '../../services/entriesService';
-import { imagesService } from '../../services/imagesService';
 import { errorNotification, successNotification } from '../notifications';
+import { getFullDate } from '../../utils';
+import { imagesService } from '../../services/imagesService';
 
 import Sidebar from '../Sidebar/Sidebar';
 
@@ -72,13 +73,15 @@ const Home = () => {
             });
     };
 
-    const openFileSystem = () => {
-        hiddenFileInput.current.click();
-    };
+    const openFileSystem = () => hiddenFileInput.current.click();
 
     const uploadImage = (event) => {
-        const fileUploaded = event.target.files[0];
+        const filesUploaded = event.target.files;
         
+        imagesService.addImages(filesUploaded, activeEntryId)
+            .then(res => {
+                setEntryImgs(res);
+            });
     };
 
     return (
@@ -91,7 +94,7 @@ const Home = () => {
                         <FontAwesomeIcon icon={faEllipsis} className="icon menu-icon"></FontAwesomeIcon>
                         <FontAwesomeIcon icon={faPlus} onClick={e => createEntry(e)} className="icon plus-icon"></FontAwesomeIcon>
                         <form method="post">
-                            <input type="file" name="entry-img" id="entry-img" ref={hiddenFileInput} onChange={(e) => uploadImage(e)} />
+                            <input type="file" name="entry-img" id="entry-img" multiple ref={hiddenFileInput} onChange={(e) => uploadImage(e)} />
                             <FontAwesomeIcon icon={faPaperclip} onClick={() => openFileSystem()} className="icon menu-icon"></FontAwesomeIcon>
                         </form>
                     </section>
@@ -100,12 +103,14 @@ const Home = () => {
                         <input type="hidden" className="entry-id" name="entry-id" value={activeEntry.id} />
 
                         <section className="entry-content-wrapper">
-                            <h1 className="entry-date">{getFullDate(activeEntry.createdAt)}</h1>
-                            <textarea className="entry-content" name="content" value={activeEntry.content} onChange={e => setActiveEntry({...activeEntry, content: e.target.value})}></textarea>
-                        </section>
+                            <article className="entry-text-wrapper">
+                                <h1 className="entry-date">{getFullDate(activeEntry.createdAt)}</h1>
+                                <TextareaAutosize className="entry-text" name="content" value={activeEntry.content} onChange={e => setActiveEntry({...activeEntry, content: e.target.value})}></TextareaAutosize>
+                            </article>
 
-                        <section className="entry-imgs-wrapper">
-                            {entryImgs.map(img => <img key={img.id} src={img.path} className="entry-img"></img>)}
+                            <article className="entry-imgs-wrapper">
+                                {entryImgs.map(img => <img key={img.id} src={`http://localhost:5500${img.path}`} className="entry-img"></img>)}
+                            </article>
                         </section>
 
                         <button className="save-entry-btn" type="submit">Save</button>

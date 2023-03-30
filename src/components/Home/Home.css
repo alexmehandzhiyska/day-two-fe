@@ -5,7 +5,11 @@
 }
 
 .entry-content-wrapper {
-    width: 35vw;
+    min-height: 80vh;
+}
+
+.entry-text-wrapper {
+    width: 40vw;
     padding: 0 20em;
 }
 
@@ -13,17 +17,16 @@
     font-size: 1.5rem;
 }
 
-.entry-content {
+.entry-text {
     font-size: 1.15rem;
     line-height: 1.5;
     border: none;
     font-family: sans-serif;
-    resize: none;
     width: 35vw;
-    min-height: 20vh;
+    resize: none;
 }
 
-.entry-content:focus {
+.entry-text:focus {
     border: none;
     outline: none;
 }
@@ -42,14 +45,13 @@
 }
 
 .save-entry-btn {
-    position: absolute;
-    bottom: 1em;
     color: white;
     background: var(--blue);
     border: none;
     padding: 8px 35px;
     font-size: 1.25rem;
     border-radius: 20px;
+    margin: 1em 0;
 }
 
 .icon {
@@ -68,7 +70,15 @@
     display: none;
 }
 
+.entry-imgs-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .entry-img {
-    width: 300px;
-    height: 500px;
+    max-width: 40vw;
+    margin: 1em 0;
+    border: 2px solid lightgray;
+    border-radius: 10px;
 }
