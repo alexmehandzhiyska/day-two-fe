@@ -1,13 +1,14 @@
 import { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEllipsis, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import { entriesService } from '../../services/entriesService';
-import { errorNotification, successNotification } from '../notifications';
-import { getFullDate } from '../../utils';
 import { imagesService } from '../../services/imagesService';
+import { errorNotification, successNotification } from '../notifications';
+import { getFullDate, openOptionsMenu } from '../../utils';
+import OptionsMenu from '../OptionsMenu/OptionsMenu';
 
 import Sidebar from '../Sidebar/Sidebar';
 
@@ -17,6 +18,7 @@ const Home = () => {
     const [entries, setEntries] = useState([]);
     const [activeEntry, setActiveEntry] = useState(null);
     const [entryImgs, setEntryImgs] = useState([]);
+    const [stateChanged, setStateChanged] = useState(false);
 
     const { activeEntryId } = useParams();
     const navigate = useNavigate();
@@ -42,7 +44,7 @@ const Home = () => {
             .catch(() => {
                 errorNotification('Error');
             });
-    }, [activeEntryId]);
+    }, [activeEntryId, stateChanged]);
 
     const updateEntry = (event) => {
         event.preventDefault();
@@ -77,12 +79,24 @@ const Home = () => {
 
     const uploadImage = (event) => {
         const filesUploaded = event.target.files;
-        
-        imagesService.addImages(filesUploaded, activeEntryId)
+
+        imagesService.addMany(filesUploaded, activeEntryId)
             .then(res => {
                 setEntryImgs(res);
             });
     };
+
+    const deleteImage = (event) => {
+        const imgId = event.target.parentElement.parentElement.id;
+
+        imagesService.deleteOne(imgId)
+            .then(() => {
+                setStateChanged(true);
+            })
+            .catch(() => {
+                errorNotification('Cannot delete this photo.');
+            });
+    }
 
     return (
         <section className="content-wrapper">
@@ -109,7 +123,12 @@ const Home = () => {
                             </article>
 
                             <article className="entry-imgs-wrapper">
-                                {entryImgs.map(img => <img key={img.id} src={`http://localhost:5500${img.path}`} className="entry-img"></img>)}
+                                {entryImgs.map(img => 
+                                    <section id={img.id}>
+                                        <img key={img.id} src={`http://localhost:5500${img.path}`} className="entry-img" onContextMenu={e => openOptionsMenu(e, 'img', img.id)}></img>
+                                        <OptionsMenu options={{'delete': deleteImage}} menuType="img" id={img.id}></OptionsMenu>
+                                    </section>
+                                )}
                             </article>
                         </section>
 
@@ -117,6 +136,7 @@ const Home = () => {
                     </form>
                 </article>
             }
+
         </section>
     );
 };

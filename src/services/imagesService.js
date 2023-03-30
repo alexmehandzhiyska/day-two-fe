@@ -11,7 +11,7 @@ const getByEntryId = async (entryId) => {
     return data;
 };
 
-const addImages = async (imgs, entryId) => {
+const addMany = async (imgs, entryId) => {
     const formData = new FormData();
 
     const imgArr = Object.values(imgs);
@@ -26,12 +26,26 @@ const addImages = async (imgs, entryId) => {
     });
 
     const data = await response.json();
-    console.log(data);    
+
     if (!response.ok) {
         throw new Error(data);
     }
 
     return data;
-}
+};
 
-export const imagesService = { getByEntryId, addImages };
+const deleteOne = async (imageId) => {
+    const response = await fetch(`${baseUrl}/images/${imageId}`, {
+        method: 'DELETE'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data);
+    }
+
+    return data;
+};
+
+export const imagesService = { getByEntryId, addMany, deleteOne };
