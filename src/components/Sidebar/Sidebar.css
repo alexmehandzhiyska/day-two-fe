@@ -1,6 +1,6 @@
 .sidebar {
     border-right: 1px solid lightgray;
-    width: 30vw;
+    min-width: 30%;
     height: 100vh;
     margin-top: 2em;
     overflow-y: scroll;
@@ -81,4 +81,21 @@
 
 .options-menu-icon {
     margin-right: 5px;
+}
+
+.sidebar-hidden {
+    display: none;
+}
+
+@media all and (min-width: 1024px) {
+    .sidebar {
+        display: block !important;
+    }
+}
+
+@media all and (max-width: 1024px) {
+    .sidebar {
+        display: none;
+        height: auto;
+    }
 }

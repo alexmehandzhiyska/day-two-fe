@@ -6,7 +6,7 @@ import { closeOptionsMenu } from '../../utils';
 const OptionsMenu = (props) => {
     const { options, menuType, id } = props;
 
-    useEffect(() => document.addEventListener('click', () => closeOptionsMenu(menuType)), []);
+    useEffect(() => document.addEventListener('click', () => closeOptionsMenu(menuType)), [menuType]);
     
     return (
         <ul className={`options-menu menu-${menuType}`} id={`menu-${menuType}-${id}`}>

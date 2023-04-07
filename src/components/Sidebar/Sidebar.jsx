@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { getDay, getDayNum, openOptionsMenu } from '../../utils';
@@ -9,24 +8,8 @@ import OptionsMenu from '../OptionsMenu/OptionsMenu';
 
 import './Sidebar.css';
 
-const Sidebar = (props) => {
-    const entries = props.entries;
-    const activeEntry = props.activeEntry;
-
+const Sidebar = ({entries, activeEntry}) => {
     const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     const sidebarEl = document.querySelector('.sidebar');
-        
-    //     sidebarEl.addEventListener('click', () => {
-    //         const optionsMenuEl = document.querySelector('.menu-active');
-
-    //         if (optionsMenuEl) {
-    //             optionsMenuEl.className = 'options-menu';
-    //             optionsMenuEl.display = 'none';
-    //         }
-    //     });
-    // }, []);
     
     const changeEntry = (event) => {
         const selectedEntryId = event.currentTarget.querySelector('input').value;
@@ -64,7 +47,7 @@ const Sidebar = (props) => {
                         </div>
     
                         <div className="content-short">
-                            <p>{entry.content?.slice(0, 85)}...</p>
+                            <p>{entry.content?.slice(0, 80)}...</p>
                         </div>
 
                         <OptionsMenu options={{'Delete': deleteEntry}} menuType="entries" id={entry.id}></OptionsMenu>

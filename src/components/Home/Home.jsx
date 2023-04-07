@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEllipsis, faPaperclip } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEllipsis, faPaperclip, faBars } from '@fortawesome/free-solid-svg-icons';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import { entriesService } from '../../services/entriesService';
@@ -24,6 +24,8 @@ const Home = () => {
     const navigate = useNavigate();
 
     const hiddenFileInput = useRef(null);
+    const closeMenuRef = useRef(null);
+    const settingsRef = useRef(null);
 
     useEffect(() => {
         entriesService.getAll()
@@ -46,6 +48,18 @@ const Home = () => {
             });
     }, [activeEntryId, stateChanged]);
 
+    const createEntry = (event) => {
+        event.preventDefault();
+  
+        entriesService.createOne()
+            .then(res => {
+                navigate(`/entries/${res.id}`);
+            })
+            .catch(() => {
+                errorNotification('Could not create entry');
+            });
+    };
+
     const updateEntry = (event) => {
         event.preventDefault();
         
@@ -61,18 +75,6 @@ const Home = () => {
             .catch(() => {
                 errorNotification('Could not save entry.');
             }); 
-    };
-
-    const createEntry = (event) => {
-        event.preventDefault();
-  
-        entriesService.createOne()
-            .then(res => {
-                navigate(`/entries/${res.id}`);
-            })
-            .catch(() => {
-                errorNotification('Could not create entry');
-            });
     };
 
     const openFileSystem = () => hiddenFileInput.current.click();
@@ -97,21 +99,42 @@ const Home = () => {
             .catch(() => {
                 errorNotification('Cannot delete this photo.');
             });
+    };
+
+    const changeMenuDisplay = () => {
+        const sidebar = document.querySelector('.sidebar');
+
+        if (sidebar.style.display == '' || sidebar.style.display == 'none') {
+            sidebar.style.display = 'block';
+            settingsRef.current.style.display = 'none';
+            closeMenuRef.current.style.display = 'block';
+        } else {
+            sidebar.style.display = 'none';
+            settingsRef.current.style.display = 'flex';
+            closeMenuRef.current.style.display = 'none';
+        }
     }
 
     return (
         <section className="content-wrapper">
+            <FontAwesomeIcon icon={faBars} className="icon menu-icon" id="bars-icon-close" ref={closeMenuRef} onClick={() => changeMenuDisplay()}></FontAwesomeIcon>
             <Sidebar entries={entries} activeEntry={activeEntry}></Sidebar>
 
             {activeEntry &&
-                <article>
-                    <section className="entry-settings">
-                        <FontAwesomeIcon icon={faEllipsis} className="icon menu-icon"></FontAwesomeIcon>
-                        <FontAwesomeIcon icon={faPlus} onClick={e => createEntry(e)} className="icon plus-icon"></FontAwesomeIcon>
-                        <form method="post">
-                            <input type="file" name="entry-img" id="entry-img" multiple ref={hiddenFileInput} onChange={(e) => uploadImage(e)} />
-                            <FontAwesomeIcon icon={faPaperclip} onClick={() => openFileSystem()} className="icon menu-icon"></FontAwesomeIcon>
-                        </form>
+                <article className="entry-page">
+                    <section className="entry-settings" ref={settingsRef}>
+                        <div>
+                            <FontAwesomeIcon icon={faBars} className="icon menu-icon" id="bars-icon" onClick={() => changeMenuDisplay()}></FontAwesomeIcon>
+                        </div>
+
+                        <div>
+                            <FontAwesomeIcon icon={faEllipsis} className="icon menu-icon"></FontAwesomeIcon>
+                            <FontAwesomeIcon icon={faPlus} onClick={e => createEntry(e)} className="icon plus-icon"></FontAwesomeIcon>
+                            <form method="post">
+                                <input type="file" name="entry-img" id="entry-img" multiple ref={hiddenFileInput} onChange={(e) => uploadImage(e)} />
+                                <FontAwesomeIcon icon={faPaperclip} onClick={() => openFileSystem()} className="icon menu-icon"></FontAwesomeIcon>
+                            </form>
+                        </div>
                     </section>
 
                     <form className="entry-wrapper" onSubmit={(e) => updateEntry(e)}>
