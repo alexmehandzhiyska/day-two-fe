@@ -36,5 +36,8 @@ export const openOptionsMenu = (event, menuType, menuId) => {
 
 export const closeOptionsMenu = () => {
     const optionsMenuEl = document.querySelector('.menu-active');
-    optionsMenuEl.classList.remove('menu-active');
+
+    if (optionsMenuEl) {
+        optionsMenuEl.classList.remove('menu-active');
+    }
 };
