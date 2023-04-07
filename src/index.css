@@ -7,9 +7,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
   --blue: #45c0ff;
   min-width: 100vw;
+  overflow-x: hidden;
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  height: 100%;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html {
+    overflow: hidden;
+}
+
+.dark {
+    color: white;
+    background: #2c2e30;
+    scrollbar-color: dark;
+}
+
+.light {
+    color: black;
+    background: white;
 }

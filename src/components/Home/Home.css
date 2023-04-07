@@ -1,10 +1,13 @@
 .content-wrapper {
     display: flex;
     justify-content: space-between;
+    height: 110vh !important;
 }
 
 .entry-page {
     min-width: 70%;
+    overflow-y: auto !important;
+    padding-bottom: 2em;
 }
 
 .entry-content-wrapper {
@@ -28,6 +31,12 @@
 .entry-text:focus {
     border: none;
     outline: none;
+}
+
+.entry-text-dark {
+    color: white;
+    background: #2c2e30;
+    scrollbar-color: dark;
 }
 
 .entry-settings {
@@ -113,6 +122,10 @@
 }
 
 @media all and (max-width: 1024px) {
+    .entry-page {
+        width: 100vw;
+    }
+
     .content-wrapper {
         display: block;
     }

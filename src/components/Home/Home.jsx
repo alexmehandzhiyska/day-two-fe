@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEllipsis, faPaperclip, faBars } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faPaperclip, faBars, faMoon } from '@fortawesome/free-solid-svg-icons';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import { entriesService } from '../../services/entriesService';
@@ -19,6 +19,7 @@ const Home = () => {
     const [activeEntry, setActiveEntry] = useState(null);
     const [entryImgs, setEntryImgs] = useState([]);
     const [stateChanged, setStateChanged] = useState(false);
+    const [colorTheme, setColorTheme] = useState('light');
 
     const { activeEntryId } = useParams();
     const navigate = useNavigate();
@@ -26,6 +27,10 @@ const Home = () => {
     const hiddenFileInput = useRef(null);
     const closeMenuRef = useRef(null);
     const settingsRef = useRef(null);
+
+    useEffect(() => {
+        document.body.className = colorTheme;
+    }, [colorTheme]);
 
     useEffect(() => {
         entriesService.getAll()
@@ -113,10 +118,10 @@ const Home = () => {
             settingsRef.current.style.display = 'flex';
             closeMenuRef.current.style.display = 'none';
         }
-    }
+    };
 
     return (
-        <section className="content-wrapper">
+        <section className={colorTheme == 'light' ? 'content-wrapper' : 'content-wrapper dark'}>
             <FontAwesomeIcon icon={faBars} className="icon menu-icon" id="bars-icon-close" ref={closeMenuRef} onClick={() => changeMenuDisplay()}></FontAwesomeIcon>
             <Sidebar entries={entries} activeEntry={activeEntry}></Sidebar>
 
@@ -128,7 +133,7 @@ const Home = () => {
                         </div>
 
                         <div>
-                            <FontAwesomeIcon icon={faEllipsis} className="icon menu-icon"></FontAwesomeIcon>
+                            <FontAwesomeIcon icon={faMoon} className="icon menu-icon" onClick={() => setColorTheme(colorTheme == 'light' ? 'dark' : 'light')}></FontAwesomeIcon>
                             <FontAwesomeIcon icon={faPlus} onClick={e => createEntry(e)} className="icon plus-icon"></FontAwesomeIcon>
                             <form method="post">
                                 <input type="file" name="entry-img" id="entry-img" multiple ref={hiddenFileInput} onChange={(e) => uploadImage(e)} />
@@ -143,7 +148,7 @@ const Home = () => {
                         <section className="entry-content-wrapper">
                             <article className="entry-text-wrapper">
                                 <h1 className="entry-date">{getFullDate(activeEntry.createdAt)}</h1>
-                                <TextareaAutosize className="entry-text" name="content" value={activeEntry.content} onChange={e => setActiveEntry({...activeEntry, content: e.target.value})}></TextareaAutosize>
+                                <TextareaAutosize className={colorTheme == 'light' ? 'entry-text' : 'entry-text entry-text-dark'} name="content" value={activeEntry.content} onChange={e => setActiveEntry({...activeEntry, content: e.target.value})}></TextareaAutosize>
                             </article>
 
                             <article className="entry-imgs-wrapper">
