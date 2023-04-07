@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { getDay, getDayNum } from '../../utils';
+import { getDay, getDayNum, openOptionsMenu } from '../../utils';
+import { entriesService } from '../../services/entriesService';
+import { errorNotification } from '../notifications';
+
 import OptionsMenu from '../OptionsMenu/OptionsMenu';
 
 import './Sidebar.css';
@@ -8,46 +12,50 @@ import './Sidebar.css';
 const Sidebar = (props) => {
     const entries = props.entries;
     const activeEntry = props.activeEntry;
-    const setActiveEntry = props.setActiveEntry;
-    const stateSwitch = props.stateSwitch;
-    const setStateSwitch = props.setStateSwitch;
 
-    useEffect(() => {
-        window.addEventListener('click', () => {
-            const optionsMenuEl = document.querySelector('.menu-active');
-            optionsMenuEl.className = 'options-menu';
-            optionsMenuEl.display = 'none';
-        });
-    }, []);
+    const navigate = useNavigate();
+
+    // useEffect(() => {
+    //     const sidebarEl = document.querySelector('.sidebar');
+        
+    //     sidebarEl.addEventListener('click', () => {
+    //         const optionsMenuEl = document.querySelector('.menu-active');
+
+    //         if (optionsMenuEl) {
+    //             optionsMenuEl.className = 'options-menu';
+    //             optionsMenuEl.display = 'none';
+    //         }
+    //     });
+    // }, []);
     
     const changeEntry = (event) => {
         const selectedEntryId = event.currentTarget.querySelector('input').value;
-        const selectedEntry = entries.find(e => e.id == selectedEntryId);
-        setActiveEntry(selectedEntry);
+        navigate(`/entries/${selectedEntryId}`);
     };
 
-    const openOptionsMenu = (event) => {
+    const deleteEntry = (event) => {
         event.preventDefault();
 
-        const activeOptionsMenuEls = document.querySelectorAll('.menu-active');
-        activeOptionsMenuEls.forEach(menuEl => menuEl.classList.remove('menu-active'));
-
-        const optionsMenuEl = event.currentTarget.querySelector('ul');
-        optionsMenuEl.classList.add('menu-active');
-
-        const xPosition = event.clientX;
-        const yPosition = event.clientY;
-
-        optionsMenuEl.style.left = `${xPosition}px`;
-        optionsMenuEl.style.top = `${yPosition}px`;
+        const entryId = event.currentTarget.parentElement.parentElement.querySelector('input').id;
+        
+        entriesService.deleteOne(entryId)
+            .then(() => {
+                entriesService.getAll()
+                    .then(res => {
+                        navigate(`/entries/${res[0].id}`);
+                    });
+            })
+            .catch(() => {
+                errorNotification('error');
+            });
     };
-    
+
     return (
         <article className="sidebar">
             {activeEntry && 
                 <>
                 {entries.map((entry) => 
-                    <section key={entry.id} className={entry.id == activeEntry.id ? 'entry active' : 'entry'} onClick={e => changeEntry(e)} onContextMenu={e => openOptionsMenu(e)}>
+                    <section key={entry.id} className={entry.id == activeEntry.id ? 'entry active' : 'entry'} id="menu-entries" onClick={e => changeEntry(e)} onContextMenu={e => openOptionsMenu(e, 'entries', entry.id)}>
                         <input type="hidden" className="entry-id" name="entry-id" value={entry.id} id={entry.id} />
 
                         <div className="date-card">
@@ -59,7 +67,7 @@ const Sidebar = (props) => {
                             <p>{entry.content?.slice(0, 85)}...</p>
                         </div>
 
-                        <OptionsMenu entryId={entry.id} stateSwitch={stateSwitch} setStateSwitch={setStateSwitch}></OptionsMenu>
+                        <OptionsMenu options={{'Delete': deleteEntry}} menuType="entries" id={entry.id}></OptionsMenu>
                     </section>
                 )}
                 </>

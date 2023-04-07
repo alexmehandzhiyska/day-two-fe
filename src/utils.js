@@ -20,3 +20,24 @@ export const getFullDate = (date) => {
 
     return `${day} ${month}, ${year}`;
 };
+
+export const openOptionsMenu = (event, menuType, menuId) => {
+    event.preventDefault();
+    
+    const optionsMenuEl = document.querySelector(`#menu-${menuType}-${menuId}`);
+    optionsMenuEl.classList.add('menu-active');
+
+    const xPosition = event.clientX;
+    const yPosition = event.clientY;
+
+    optionsMenuEl.style.left = `${xPosition}px`;
+    optionsMenuEl.style.top = `${yPosition}px`;
+};
+
+export const closeOptionsMenu = () => {
+    const optionsMenuEl = document.querySelector('.menu-active');
+
+    if (optionsMenuEl) {
+        optionsMenuEl.classList.remove('menu-active');
+    }
+};

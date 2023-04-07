@@ -3,7 +3,7 @@ import withReactContent from 'sweetalert2-react-content';
 
 const MySwal = withReactContent(Swal);
 
-export const successNotification = async (title="Success!") => {
+export const successNotification = async (title='Success!') => {
     return MySwal.fire({
         icon: 'success',
         title: <p>{title}</p>,
@@ -13,7 +13,7 @@ export const successNotification = async (title="Success!") => {
     }).then(() => MySwal.fire(title, '', 'success'));
 }
 
-export const errorNotification = async (title="Error!") => {
+export const errorNotification = async (title='Error!') => {
     return MySwal.fire({
         icon: 'error',
         title: <p>{title}</p>,
