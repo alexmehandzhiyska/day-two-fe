@@ -23,7 +23,7 @@ export const getFullDate = (date) => {
 
 export const openOptionsMenu = (event, menuType, menuId) => {
     event.preventDefault();
-
+    
     const optionsMenuEl = document.querySelector(`#menu-${menuType}-${menuId}`);
     optionsMenuEl.classList.add('menu-active');
 

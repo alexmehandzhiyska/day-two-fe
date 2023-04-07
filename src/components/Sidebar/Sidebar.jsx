@@ -36,7 +36,7 @@ const Sidebar = (props) => {
     const deleteEntry = (event) => {
         event.preventDefault();
 
-        const entryId = event.currentTarget.parentElement.id;
+        const entryId = event.currentTarget.parentElement.parentElement.querySelector('input').id;
         
         entriesService.deleteOne(entryId)
             .then(() => {
@@ -55,7 +55,7 @@ const Sidebar = (props) => {
             {activeEntry && 
                 <>
                 {entries.map((entry) => 
-                    <section key={entry.id} className={entry.id == activeEntry.id ? 'entry active' : 'entry'} onClick={e => changeEntry(e)} onContextMenu={e => openOptionsMenu(e, 'entries')}>
+                    <section key={entry.id} className={entry.id == activeEntry.id ? 'entry active' : 'entry'} id="menu-entries" onClick={e => changeEntry(e)} onContextMenu={e => openOptionsMenu(e, 'entries', entry.id)}>
                         <input type="hidden" className="entry-id" name="entry-id" value={entry.id} id={entry.id} />
 
                         <div className="date-card">
@@ -67,7 +67,7 @@ const Sidebar = (props) => {
                             <p>{entry.content?.slice(0, 85)}...</p>
                         </div>
 
-                        <OptionsMenu options={{'delete': deleteEntry}} menuType="entries" id={entry.id}></OptionsMenu>
+                        <OptionsMenu options={{'Delete': deleteEntry}} menuType="entries" id={entry.id}></OptionsMenu>
                     </section>
                 )}
                 </>

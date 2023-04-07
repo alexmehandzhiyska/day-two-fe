@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEllipsis, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -82,6 +82,7 @@ const Home = () => {
 
         imagesService.addMany(filesUploaded, activeEntryId)
             .then(res => {
+                console.log(res);
                 setEntryImgs(res);
             });
     };
@@ -124,9 +125,9 @@ const Home = () => {
 
                             <article className="entry-imgs-wrapper">
                                 {entryImgs.map(img => 
-                                    <section id={img.id}>
-                                        <img key={img.id} src={`http://localhost:5500${img.path}`} className="entry-img" onContextMenu={e => openOptionsMenu(e, 'img', img.id)}></img>
-                                        <OptionsMenu options={{'delete': deleteImage}} menuType="img" id={img.id}></OptionsMenu>
+                                    <section key={img.id} id={img.id}>
+                                        <img src={`http://localhost:5500${img.path}`} className="entry-img" onContextMenu={e => openOptionsMenu(e, 'img', img.id)}></img>
+                                        <OptionsMenu options={{'Delete': deleteImage}} menuType="img" id={img.id}></OptionsMenu>
                                     </section>
                                 )}
                             </article>
