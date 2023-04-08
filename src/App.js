@@ -1,9 +1,9 @@
 import './App.css';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { entriesService } from './services/entriesService';
 
 import Home from './components/Home/Home';
-import { useEffect, useState } from 'react';
+import { entriesService } from './services/entriesService';
 
 function App() {
   const [firstEntryId, setActiveEntryId] = useState(null);
