@@ -1,51 +1,19 @@
 import { baseUrl } from '../constants';
+import { get, post, del } from './requester';
 
-const getByEntryId = async (entryId) => {
-    const response = await fetch(`${baseUrl}/images/${entryId}`);
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(data);
-    }
-
-    return data;
-};
+const getByEntryId = async (entryId) => get(`${baseUrl}/images/${entryId}`)
 
 const addMany = async (imgs, entryId) => {
     const formData = new FormData();
 
-    const imgArr = Object.values(imgs);
-
-    imgArr.forEach(img => {
+    Object.values(imgs).forEach(img => {
         formData.append("entry-img", img);
     });
 
-    const response = await fetch(`${baseUrl}/images/${entryId}`, {
-        method: 'POST',
-        body: formData
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(data);
-    }
-
+    const data = await post(`${baseUrl}/images/${entryId}`, formData, 'raw');
     return data;
 };
 
-const deleteOne = async (imageId) => {
-    const response = await fetch(`${baseUrl}/images/${imageId}`, {
-        method: 'DELETE'
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new Error(data);
-    }
-
-    return data;
-};
+const deleteOne = async (imageId) => del(`${baseUrl}/images/${imageId}`);
 
 export const imagesService = { getByEntryId, addMany, deleteOne };
