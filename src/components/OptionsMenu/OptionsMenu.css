@@ -14,7 +14,7 @@
 
 .options-menu-item {
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     font-size: 1.1rem;
     list-style-type: none;
