@@ -1,7 +1,5 @@
 <div align="center">
-  <a href="https://lmql.ai">
     <img src="https://upload.wikimedia.org/wikipedia/en/1/19/DayOne_Logo_2016.png" alt="Logo" width="80" height="80">
-  </a>
 
   <h3 align="center">Day two</h3>
 
