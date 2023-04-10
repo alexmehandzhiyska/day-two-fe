@@ -18,7 +18,6 @@ const Home = () => {
     const [entries, setEntries] = useState([]);
     const [activeEntry, setActiveEntry] = useState(null);
     const [entryImgs, setEntryImgs] = useState([]);
-    const [stateChanged, setStateChanged] = useState(false);
     const [isDark, setIsDark] = useState(false);
 
     const { activeEntryId } = useParams();
@@ -57,7 +56,7 @@ const Home = () => {
             .catch(() => {
                 errorNotification('Error');
             });
-    }, [activeEntryId, stateChanged]);
+    }, [activeEntryId]);
 
     const createEntry = (event) => {
         event.preventDefault();
@@ -105,7 +104,7 @@ const Home = () => {
 
         imagesService.deleteOne(imgId)
             .then(() => {
-                setStateChanged(true);
+                navigate('/');
             })
             .catch(() => {
                 errorNotification('Cannot delete this photo.');
@@ -172,7 +171,7 @@ const Home = () => {
                             <article className="entry-imgs-wrapper">
                                 {entryImgs.map(img => 
                                     <section key={img.id} id={img.id}>
-                                        <img src={`http://localhost:5500${img.path}`} className="entry-img" onContextMenu={e => openOptionsMenu(e, 'img', img.id)}></img>
+                                        <img src={`http://localhost:5500${img.path}`} className="entry-img" onContextMenu={e => openOptionsMenu(e, 'img', img.id)} alt="Entry"></img>
                                         <OptionsMenu options={{'Delete': deleteImage}} menuType="img" id={img.id}></OptionsMenu>
                                     </section>
                                 )}
