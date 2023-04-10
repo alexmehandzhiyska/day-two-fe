@@ -19,6 +19,7 @@ const Home = () => {
     const [activeEntry, setActiveEntry] = useState(null);
     const [entryImgs, setEntryImgs] = useState([]);
     const [isDark, setIsDark] = useState(false);
+    const [isChanged, setIsChanged] = useState(false);
 
     const { activeEntryId } = useParams();
     const navigate = useNavigate();
@@ -42,11 +43,12 @@ const Home = () => {
             .then(res => {
                 setEntries(res);
                 setActiveEntry(res.find(entry => entry.id == activeEntryId));
+                setIsChanged(false);
             })
             .catch(err => {
                 errorNotification(err);
             });
-    }, [activeEntryId]);
+    }, [activeEntryId, isChanged]);
 
     useEffect(() => {
         imagesService.getByEntryId(activeEntryId)
@@ -56,7 +58,7 @@ const Home = () => {
             .catch(() => {
                 errorNotification('Error');
             });
-    }, [activeEntryId]);
+    }, [activeEntryId, isChanged]);
 
     const createEntry = (event) => {
         event.preventDefault();
@@ -104,7 +106,7 @@ const Home = () => {
 
         imagesService.deleteOne(imgId)
             .then(() => {
-                navigate('/');
+                setIsChanged(true);
             })
             .catch(() => {
                 errorNotification('Cannot delete this photo.');
